@@ -17,4 +17,4 @@ class Heartbeat:
         timeDif = self.period - (nowTime - self.last)
         if timeDif > 0:
             sleep( timeDif )
-        self.last = time.time()
+        self.last = nowTime
