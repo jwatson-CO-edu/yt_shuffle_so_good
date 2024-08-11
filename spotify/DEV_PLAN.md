@@ -6,6 +6,7 @@
 #### Easy Difficulty
 * Spotipy API
     - https://spotipy.readthedocs.io/en/2.24.0/#spotipy.client.Spotify.search
+        * https://developer.spotify.com/documentation/web-api/reference/search
     - https://spotipy.readthedocs.io/en/2.24.0/index.html#spotipy.client.Spotify.recommendations
     - https://spotipy.readthedocs.io/en/2.24.0/index.html#spotipy.client.Spotify.recommendation_genre_seeds
 * https://medium.com/@obielinda/building-a-spotify-recommendation-system-d4b67018eac2
