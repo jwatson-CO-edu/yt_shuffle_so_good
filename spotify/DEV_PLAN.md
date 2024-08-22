@@ -2,6 +2,23 @@
 ## Playlist Gardening
 * 2024-08-09, Current State: **Satisfactory**
 ## New Music Discovery Automation
+* `[Y]` **Search 01**, 2024-08-09, Current State: **Satisfactory**
+### Search 02, Graded by Mini-Genre Proximity
+* `[Y]` Cluster playlist songs into Micro-Genres, 2024-08-XX, Current State: **Satisfactory**
+* `[>]` Merge Micro-Genres into Mini-Genres
+* `[>]` Move Mini-Genre Outliers to Better Homes
+* `[ ]` Sub-Searches
+    - `[ ]` Sub-search 01
+    - `[ ]` New Releases
+    - `[ ]` Spotify Recommendations by Genre
+    - `[ ]` Artist Top Tracks
+    - `[ ]` Related Artists
+    - `[ ]` Featured Playlists
+* `[ ]` Determine a total population to gather, Then sub-divide into above sub-searches
+* `[ ]` Grade and Rank gathered results by Mini-Genre proximity
+* `[ ]` Add top results to probationary playlist
+* `[ ]` Test Search 02
+### `??` Search 03, ANN `??`
 ### Sources
 #### Easy Difficulty
 * Spotipy API
