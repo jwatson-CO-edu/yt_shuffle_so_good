@@ -5,15 +5,15 @@
 * `[Y]` **Search 01**, 2024-08-09, Current State: **Satisfactory**
 ### Search 02, Graded by Mini-Genre Proximity
 * `[Y]` Cluster playlist songs into Micro-Genres, 2024-08-XX, Current State: **Satisfactory**
-* `[>]` Merge Micro-Genres into Mini-Genres
-* `[>]` Move Mini-Genre Outliers to Better Homes
-* `[ ]` Sub-Searches
-    - `[ ]` Sub-search 01
-    - `[ ]` New Releases
+* `[Y]` Merge Micro-Genres into Mini-Genres, 2024-08-24: Tuned merge radius, Seems okay?
+* `[Y]` Move Mini-Genre Outliers to Better Homes, 2024-08-24: If a mini-genre member is closer to a neighboring mini-genre than it is to its average sibling, then move to the neighboring mini-genre
+* `[>]` Sub-Searches
+    - `[>]` New Releases
     - `[ ]` Spotify Recommendations by Genre
     - `[ ]` Artist Top Tracks
     - `[ ]` Related Artists
     - `[ ]` Featured Playlists
+    - `[ ]` Sub-search 01
 * `[ ]` Determine a total population to gather, Then sub-divide into above sub-searches
 * `[ ]` Grade and Rank gathered results by Mini-Genre proximity
 * `[ ]` Add top results to probationary playlist
