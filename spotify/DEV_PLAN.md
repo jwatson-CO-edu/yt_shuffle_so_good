@@ -8,9 +8,9 @@
 * `[Y]` Merge Micro-Genres into Mini-Genres, 2024-08-24: Tuned merge radius, Seems okay?
 * `[Y]` Move Mini-Genre Outliers to Better Homes, 2024-08-24: If a mini-genre member is closer to a neighboring mini-genre than it is to its average sibling, then move to the neighboring mini-genre
 * `[>]` Sub-Searches
-    - `[>]` New Releases
-    - `[ ]` Spotify Recommendations by Genre
-    - `[ ]` Artist Top Tracks
+    - `[Y]` New Releases, 2024-08-24: New Albums
+    - `[Y]` Spotify Recommendations by Genre, 2024-08-24: New Tracks
+    - `[>]` Artist Top Tracks
     - `[ ]` Related Artists
     - `[ ]` Featured Playlists
     - `[ ]` Sub-search 01
