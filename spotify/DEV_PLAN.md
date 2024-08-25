@@ -10,9 +10,9 @@
 * `[>]` Sub-Searches
     - `[Y]` New Releases, 2024-08-24: New Albums
     - `[Y]` Spotify Recommendations by Genre, 2024-08-24: New Tracks
-    - `[>]` Artist Top Tracks
-    - `[ ]` Related Artists
-    - `[ ]` Featured Playlists
+    - `[Y]` Artist Top Tracks, 2024-08-25: New Tracks
+    - `[Y]` Related Artists, 2024-08-25: New Tracks
+    - `[>]` Featured Playlists
     - `[ ]` Sub-search 01
 * `[ ]` Determine a total population to gather, Then sub-divide into above sub-searches
 * `[ ]` Grade and Rank gathered results by Mini-Genre proximity
