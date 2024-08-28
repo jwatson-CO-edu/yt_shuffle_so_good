@@ -12,12 +12,20 @@
     - `[Y]` Spotify Recommendations by Genre, 2024-08-24: New Tracks
     - `[Y]` Artist Top Tracks, 2024-08-25: New Tracks
     - `[Y]` Related Artists, 2024-08-25: New Tracks
-    - `[>]` Featured Playlists
-    - `[ ]` Sub-search 01
-* `[ ]` Determine a total population to gather, Then sub-divide into above sub-searches
-* `[ ]` Grade and Rank gathered results by Mini-Genre proximity
-* `[ ]` Add top results to probationary playlist
-* `[ ]` Test Search 02
+    - `[Y]` Featured Playlists, 2024-08-28: New Tracks
+    - `[Y]` Sub-search 01, 2024-08-28: See Above
+* `[>]` Combined Search
+    - `[>]` Function
+        * `[ ]` Determine a total population to gather, Then sub-divide into above sub-searches
+        * `[ ]` Filter
+            - `[ ]` Not in Collection
+            - `[ ]` Not in Reviewed
+            - `[ ]` Not shorter than 1:45
+            - `[ ]` Not vocal (explicit)
+        * `[ ]` Grade and Rank gathered results by Mini-Genre proximity
+    - `[ ]` Add top results to probationary playlist
+    - `[ ]` Update review IDs
+    - `[ ]` Test Search 02
 ### `??` Search 03, ANN `??`
 ### Sources
 #### Easy Difficulty
