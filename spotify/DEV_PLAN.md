@@ -7,7 +7,7 @@
 * `[Y]` Cluster playlist songs into Micro-Genres, 2024-08-XX, Current State: **Satisfactory**
 * `[Y]` Merge Micro-Genres into Mini-Genres, 2024-08-24: Tuned merge radius, Seems okay?
 * `[Y]` Move Mini-Genre Outliers to Better Homes, 2024-08-24: If a mini-genre member is closer to a neighboring mini-genre than it is to its average sibling, then move to the neighboring mini-genre
-* `[>]` Sub-Searches
+* `[Y]` Sub-Searches, 2024-08-29: Individual searches have been tested
     - `[Y]` New Releases, 2024-08-24: New Albums
     - `[Y]` Spotify Recommendations by Genre, 2024-08-24: New Tracks
     - `[Y]` Artist Top Tracks, 2024-08-25: New Tracks
@@ -16,13 +16,13 @@
     - `[Y]` Sub-search 01, 2024-08-28: See Above
 * `[>]` Combined Search
     - `[>]` Function
-        * `[>]` Determine a total population to gather, Perform sub-searches and request excess tracks
-        * `[ ]` Populate extended metadata for all returned tracks
-        * `[ ]` Filter
+        * `[Y]` Perform sub-searches (request excess tracks), 2024-08-29: Multi-search needs testing
+        * `[Y]` Populate extended metadata for all returned tracks, 2024-08-29: Multi-search needs testing
+        * `[>]` Filter
+            - `[>]` Not shorter than 1:45
+            - `[>]` Not vocal (explicit)
             - `[ ]` Not in Collection
             - `[ ]` Not in Reviewed
-            - `[ ]` Not shorter than 1:45
-            - `[ ]` Not vocal (explicit)
         * `[ ]` Grade and Rank gathered results by Mini-Genre proximity
     - `[ ]` Add top results to probationary playlist
     - `[ ]` Update review IDs
@@ -46,3 +46,5 @@
 #### Hard Difficulty
 * https://medium.com/@benalex/implement-your-own-music-recommender-with-graph-neural-networks-lightgcn-f59e3bf5f8f5
 * https://arxiv.org/pdf/2312.10079
+* https://arxiv.org/pdf/2310.06282v4
+* https://hackernoon.com/ai-prompts-are-the-incantations-that-make-chatgpt-do-magical-things
