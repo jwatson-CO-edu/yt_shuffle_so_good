@@ -16,7 +16,8 @@
     - `[Y]` Sub-search 01, 2024-08-28: See Above
 * `[>]` Combined Search
     - `[>]` Function
-        * `[ ]` Determine a total population to gather, Then sub-divide into above sub-searches
+        * `[>]` Determine a total population to gather, Perform sub-searches and request excess tracks
+        * `[ ]` Populate extended metadata for all returned tracks
         * `[ ]` Filter
             - `[ ]` Not in Collection
             - `[ ]` Not in Reviewed
