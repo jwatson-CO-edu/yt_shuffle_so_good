@@ -2,6 +2,8 @@ import os, pickle, time
 from datetime import datetime
 now = time.time
 
+import numpy as np
+from scipy.spatial import cKDTree
 
 
 ########## SPOTIFY: DATABASE OPERATIONS ############################################################
@@ -121,10 +123,13 @@ def update_music_database( db, fDb ):
         db['queries'][ query ] = db['queries'].get( query, 0 ) + fDb['queries'][ query ]
 
     db['genres'].update( fDb['genres'] )
+
+    return db
     
 
 def load_music_database( data, dataDir, dataPrefix, staleTime_s = 31*24*60*60, forceLoad = False ):
     """ Find the latest music database, test for freshness, and set current db if fresh """
+    db      = None
     dbFiles = [os.path.join( dataDir, f ) for f in os.listdir( dataDir ) if (dataPrefix in str(f))]
     if len( dbFiles ):
         dbFiles.sort( reverse = True )
@@ -133,13 +138,12 @@ def load_music_database( data, dataDir, dataPrefix, staleTime_s = 31*24*60*60, f
         if (((data['time'] - db['time']) <= staleTime_s) or forceLoad):
             
             # data.update( db )
-            update_music_database( data, db )
+            db = update_music_database( data, db )
             
             print( f"Loaded {dbFiles[0]}!" )
-            return dbFiles[0]
         else:
             print( f"File {dbFiles[0]} was STALE by {(data['time']-db['time']-staleTime_s)/_MOD_T_DAY_S} days!" )
-    return None
+    return db
 
 
 def save_music_database( dataDct, outPath ):
