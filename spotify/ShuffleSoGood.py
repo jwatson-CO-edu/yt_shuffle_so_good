@@ -1,9 +1,14 @@
 import os, pickle, time
 from datetime import datetime
+from time import sleep
 now = time.time
 
 import numpy as np
 from scipy.spatial import cKDTree
+from IPython.display import clear_output
+
+import spotipy
+import spotipy.util as util
 
 
 ########## SPOTIFY: DATABASE OPERATIONS ############################################################
@@ -27,6 +32,64 @@ def init_session_database( dataPrefix  = "Study-Music-Data_" ):
     outFilNam = dataPrefix + timestamp + _DATA_POSTFIX
     outPath   = os.path.join( 'data/', str( outFilNam ) )
     return data, timestamp, outFilNam, outPath
+
+
+
+########## SPOTIFY: CLIENT CONNECTION ##############################################################
+
+class SpotifyClient:
+    """ Manage the connection to Spotify API """
+
+    def __init__( self ):
+        """ Init vars && connection """
+        ## Client ##
+        self.token = None
+        self.spot  = None
+        ## Client Info ##
+        # FIXME: STORE ALL OF THIS IN A JSON CONFIG FILE
+        self.IDpath        = "../keys/spot_ID.txt"
+        self.secretPath    = "../keys/spot_SECRET.txt"
+        self.CLIENT_ID     = ""
+        self.CLIENT_SECRET = ""
+        self.CLIENT_SCOPE  = "user-follow-modify playlist-modify-private playlist-modify-public"
+        self.USER_NAME     = "31ytgsr7wdmiaroy77msqpiupdsi"
+        self.REDIR_URI     = "https://github.com/jwatson-CO-edu/yt_shuffle_so_good"
+        self.AUTH_URL      = 'https://accounts.spotify.com/api/token'
+        self.BASE_URL      = 'https://api.spotify.com/v1/'
+        ## API Info ##
+        self._RESPONSE_LIMIT =  100
+        self._ARTIST_Q_LIM   =   50
+        self._MAX_OFFSET     = 1000
+        self._T_LOGIN_S      = 60.0 * 45 #5 #10 #20 # 25 # 50
+        self.tLastAuth       = 0.0
+        ## API Secrets ##
+        with open( self.IDpath , 'r' ) as f:
+            self.CLIENT_ID = f.readlines()[0].strip()
+        with open( self.secretPath , 'r' ) as f:
+            self.CLIENT_SECRET = f.readlines()[0].strip()
+        ## Connect ##
+        self.check_API_token()
+        
+    
+    def check_API_token( self ):
+        tNow    = now()
+        elapsed = tNow - self.tLastAuth
+        if elapsed >= self._T_LOGIN_S:
+            self.token = util.prompt_for_user_token(
+                username      = self.USER_NAME,
+                scope         = self.CLIENT_SCOPE,
+                client_id     = self.CLIENT_ID,
+                client_secret = self.CLIENT_SECRET,
+                redirect_uri  = self.REDIR_URI
+            )
+            self.spot = spotipy.Spotify( auth = self.token )
+            print( self.token )
+            clear_output( wait = True )
+            sleep( 2 )
+            print( "TOKEN OBTAINED" )
+            self.tLastAuth = tNow
+        else:
+            print( f"TOKEN STILL VALID, AGE: {elapsed/60.0:.2f} MINUTES" )
 
 
 
@@ -75,6 +138,7 @@ def get_tracks_as_vectors( tracks ):
     else:
         return list()
 
+        
 def genre_vector_ops( gnre ):
     """ Calculate track vectors and properties derived from them """
     gnre['vectors'] = get_tracks_as_vectors( gnre['tracks'] )
