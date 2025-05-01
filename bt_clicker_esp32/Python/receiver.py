@@ -82,7 +82,7 @@ def main():
     def notification_callback( data ):
         try:
             signal = bytes( data ).decode( 'utf-8' ).strip()
-            print(f"Received: {signal}")
+            print( f"Received: {signal}" )
             if signal == "CLICK":
                 print( "Performing mouse click" )
                 mouse.click( Button.left )
