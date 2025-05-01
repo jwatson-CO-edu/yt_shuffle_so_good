@@ -118,6 +118,10 @@ def main():
             elif signal == "VOLDN":
                 print( "Performing Volume Down" )
                 short_kb_press( Key.media_volume_down, _PRESS_TIME_S )
+
+            # FIXME: ADD SPOTIFY FUNCTIONS!
+            # https://support.spotify.com/de-en/article/keyboard-shortcuts/
+            # https://spotipy.readthedocs.io/en/2.25.1/index.html#spotipy.client.Spotify.start_playback
             
         except Exception as e:
             print( f"Error processing notification: {e}" )
