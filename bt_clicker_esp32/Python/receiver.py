@@ -3,8 +3,6 @@ import simplepyble
 from pynput.mouse import Button, Controller
 import time
 
-import simplepyble._simplepyble
-
 # UUID for the service and characteristic that send our signal
 # These should match the UUIDs in your ESP32 code
 SERVICE_UUID        = "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
