@@ -12,7 +12,7 @@ const int     LEFT /*-------*/ = D3;
 const int     UP /*---------*/ = D4;
 const int     DOWN /*-------*/ = D5;
 unsigned long lastDebounceTime =   0;
-unsigned long debounceDelay    = 150;
+unsigned long debounceDelay    = 200;
 
 ///// BLE Setup ///////////////////////////////////////////////////////////
 BLEServer* /*---*/ pServer /*------*/ = NULL;
@@ -94,15 +94,27 @@ void setup() {
 
 ////////// MAIN ////////////////////////////////////////////////////////////////////////////////////
 
+void send( const char* msg ){
+  pCharacteristic->setValue( msg );
+  pCharacteristic->notify();
+  Serial.printf( "%s signal sent!\n", msg );
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
-  int cn, rt, lf, up, dn, cnLst = 0, rtLst = 0, lfLst = 0, upLst = 0, dnLst = 0;
+  int cn, rt, lf, shift, dn, cnLst = 0, rtLst = 0, lfLst = 0, shiftLst = 0, dnLst = 0;
+  const char* clickSignal   = "CLICK";
+  const char* forwardSignal = "FWD";
+  const char* backSignal    = "BCK";
+  const char* nextSignal    = "NEXT";
+  const char* volUpSignal   = "VOLUP";
+  const char* volDnSignal   = "VOLDN";
 
-  cn = digitalRead( CENTER );
-  rt = digitalRead( RIGHT  );
-  lf = digitalRead( LEFT   );
-  up = digitalRead( UP     );
-  dn = digitalRead( DOWN   );
+  cn    = digitalRead( CENTER );
+  rt    = digitalRead( RIGHT  );
+  lf    = digitalRead( LEFT   );
+  shift = digitalRead( UP     );
+  dn    = digitalRead( DOWN   );
 
   
 
@@ -110,22 +122,26 @@ void loop() {
   if( (millis() - lastDebounceTime) > debounceDelay){
     // If a device is connected, send the "CLICK" signal
     if( deviceConnected ){
-      const char* clickSignal = "CLICK";
+      
       if( cn ){
-        pCharacteristic->setValue( clickSignal );
-        pCharacteristic->notify();
-        Serial.printf( "%s signal sent!\n", clickSignal );
+        send( clickSignal );
+      }else if( rt ){
+        if( shift ){  send( volUpSignal );  }else{  send( forwardSignal );  }
+      }else if( lf ){
+        if( shift ){  send( volDnSignal );  }else{  send( backSignal );  }
+      }else if( dn ){
+        send( nextSignal );
       }
       
     }else{
       Serial.println( "No device connected, signal not sent" );
     }
-    if( (cn != cnLst) || (rt != rtLst) || (lf != lfLst) || (up != upLst) || (dn != dnLst) ){  lastDebounceTime = millis();  }
-    cnLst = cn;
-    rtLst = rt;
-    lfLst = lf;
-    upLst = up;
-    dnLst = dn;
+    if( (cn != cnLst) || (rt != rtLst) || (lf != lfLst) || (shift != shiftLst) || (dn != dnLst) ){  lastDebounceTime = millis();  }
+    cnLst    = cn;
+    rtLst    = rt;
+    lfLst    = lf;
+    shiftLst = shift;
+    dnLst    = dn;
   }
 
   // Handle connection changes

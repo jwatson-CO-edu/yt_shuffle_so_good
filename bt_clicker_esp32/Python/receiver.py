@@ -1,7 +1,9 @@
 # https://claude.ai/share/99f4f95b-8539-48d7-9684-fdddfc04d2c5
 import simplepyble
-from pynput.mouse import Button, Controller
-import time
+import pynput
+from pynput.mouse import Button
+from pynput.keyboard import Key
+from time import sleep
 
 # UUID for the service and characteristic that send our signal
 # These should match the UUIDs in your ESP32 code
@@ -9,11 +11,12 @@ SERVICE_UUID        = "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 def main():
-    # Initialize mouse controller
-    mouse = Controller()
+    # Initialize controller
+    mouse    = pynput.mouse.Controller()
+    keyboard = pynput.keyboard.Controller()
     
     # Initialize SimplePyBLE
-    adapter = None
+    adapter  = None
     adapters = simplepyble.Adapter.get_adapters()
     
     if not adapters:
@@ -76,14 +79,46 @@ def main():
         selected_device.disconnect()
         return
     
+    def short_kb_press( k, s ):
+        """ Press `k` for `s` """
+        if isinstance( k, list ):
+            for key in k:
+                keyboard.press( key )
+            sleep( s )
+            for key in k:
+                keyboard.release( key )
+        else:
+            keyboard.press( k )
+            sleep( s )
+            keyboard.release( k )
+    
+    _PRESS_TIME_S = 0.05
+
     # Set up notification callback
     def notification_callback( data ):
         try:
             signal = bytes( data ).decode( 'utf-8' ).strip()
             print( f"Received: {signal}" )
+            # https://nitratine.net/blog/post/simulate-keypresses-in-python/#pressing-and-releasing-keys
             if signal == "CLICK":
                 print( "Performing mouse click" )
                 mouse.click( Button.left )
+            elif signal == "FWD":
+                print( "Performing right arrow" )
+                short_kb_press( Key.right, _PRESS_TIME_S )
+            elif signal == "BCK":
+                print( "Performing left arrow" )
+                short_kb_press( Key.left, _PRESS_TIME_S )
+            elif signal == "NEXT":
+                print( "Performing [Shift]+[n]" )
+                short_kb_press( [Key.shift, 'n'], _PRESS_TIME_S )
+            elif signal == "VOLUP":
+                print( "Performing Volume Up" )
+                short_kb_press( Key.media_volume_up, _PRESS_TIME_S )
+            elif signal == "VOLDN":
+                print( "Performing Volume Down" )
+                short_kb_press( Key.media_volume_down, _PRESS_TIME_S )
+            
         except Exception as e:
             print( f"Error processing notification: {e}" )
     
@@ -93,7 +128,7 @@ def main():
     print( "Listening for signals. Press Ctrl+C to exit..." )
     try:
         while True:
-            time.sleep(1)
+            sleep(1)
     except KeyboardInterrupt:
         pass
     finally:
