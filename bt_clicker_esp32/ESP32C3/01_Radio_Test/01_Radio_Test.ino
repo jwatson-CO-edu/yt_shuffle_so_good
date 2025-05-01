@@ -11,8 +11,8 @@ const int     RIGHT /*------*/ = D2;
 const int     LEFT /*-------*/ = D3;
 const int     UP /*---------*/ = D4;
 const int     DOWN /*-------*/ = D5;
-unsigned long lastDebounceTime =  0;
-unsigned long debounceDelay    = 50;
+unsigned long lastDebounceTime =   0;
+unsigned long debounceDelay    = 150;
 
 ///// BLE Setup ///////////////////////////////////////////////////////////
 BLEServer* /*---*/ pServer /*------*/ = NULL;
@@ -104,20 +104,40 @@ void loop() {
   up = digitalRead( UP     );
   dn = digitalRead( DOWN   );
 
-  if( (cn != cnLst) || (rt != rtLst) || (lf != lfLst) || (up != upLst) || (dn != dnLst) ){  lastDebounceTime = millis();  }
+  
 
   // If the button state has been stable for the debounce period
   if( (millis() - lastDebounceTime) > debounceDelay){
     // If a device is connected, send the "CLICK" signal
     if( deviceConnected ){
       const char* clickSignal = "CLICK";
-      pCharacteristic->setValue( clickSignal );
-      pCharacteristic->notify();
-      Serial.println( "%s signal sent", clickSignal );
+      if( cn ){
+        pCharacteristic->setValue( clickSignal );
+        pCharacteristic->notify();
+        Serial.printf( "%s signal sent!\n", clickSignal );
+      }
+      
     }else{
       Serial.println( "No device connected, signal not sent" );
     }
+    if( (cn != cnLst) || (rt != rtLst) || (lf != lfLst) || (up != upLst) || (dn != dnLst) ){  lastDebounceTime = millis();  }
+    cnLst = cn;
+    rtLst = rt;
+    lfLst = lf;
+    upLst = up;
+    dnLst = dn;
   }
 
-  Serial.printf( "CENTER %d, RIGHT %d, LEFT %d, UP %d, DOWN %d, \n", cn, rt, lf, up, dn );
+  // Handle connection changes
+  if( !deviceConnected ){
+    delay( 500 ); // Give time for the BLE stack to get things ready
+    pServer->startAdvertising(); // Restart advertising
+    Serial.println( "Restarting advertising" );
+    oldDeviceConnected = deviceConnected;
+  }
+
+  // If just connected
+  if( deviceConnected && (!oldDeviceConnected) ){  oldDeviceConnected = deviceConnected;  }
+  
+  // Serial.printf( "CENTER %d, RIGHT %d, LEFT %d, UP %d, DOWN %d, \n", cn, rt, lf, up, dn );
 }
