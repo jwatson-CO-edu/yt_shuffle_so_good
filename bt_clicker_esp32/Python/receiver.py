@@ -1,4 +1,6 @@
 # https://claude.ai/share/99f4f95b-8539-48d7-9684-fdddfc04d2c5
+# python3.11 -m pip install selenium --user
+
 import simplepyble
 import pynput
 from pynput.mouse import Button
@@ -98,7 +100,7 @@ def main():
     def notification_callback( data ):
         try:
             signal = bytes( data ).decode( 'utf-8' ).strip()
-            print( f"Received: {signal}" )
+            print( f"Received: {signal}, The current mouse position is: {mouse.position}" )
             # https://nitratine.net/blog/post/simulate-keypresses-in-python/#pressing-and-releasing-keys
             if signal == "CLICK":
                 print( "Performing mouse click" )
