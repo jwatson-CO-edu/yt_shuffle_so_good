@@ -1,4 +1,4 @@
-# https://claude.ai/share/99f4f95b-8539-48d7-9684-fdddfc04d2c5
+# Source: https://claude.ai/share/99f4f95b-8539-48d7-9684-fdddfc04d2c5
 # python3.11 -m pip install selenium --user
 
 ########## INIT ####################################################################################
@@ -15,7 +15,7 @@ from PIL import ImageGrab
 SERVICE_UUID        = "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 _START_LOC          = [ 592,  732 ] # Image Space
-_AD_OFFSET          = [ -80, -120 ] # Mouse Space
+_AD_OFFSET          = [ -80-10, -120-10 ] # Mouse Space
 
 
 ########## SCREEN IMAGE ANALYSIS ###################################################################
@@ -64,7 +64,7 @@ def get_video_bbox( img, startLoc, swatchWidth = 40, swatchThick = 4, thresh = 2
 def get_yt_bbox():
     """ Get the bounding box of the YT video """
     img  = get_image()
-    crnr = get_video_bbox( img, _START_LOC, swatchWidth = 40, swatchThick = 4, thresh = 255*0.999 )
+    crnr = get_video_bbox( img, _START_LOC, swatchWidth = 40, swatchThick = 4, thresh = 255*0.95 )
     return [crnr[1], crnr[0]] # Image space to mouse space
 
 
