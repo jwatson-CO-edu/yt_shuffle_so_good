@@ -9,6 +9,7 @@ from pynput.keyboard import Key
 from time import sleep
 import numpy as np
 from PIL import ImageGrab
+from pprint import pformat
 
 # UUID for the service and characteristic that send our signal
 # These should match the UUIDs in your ESP32 code
@@ -99,13 +100,15 @@ def main():
     
     # Display and select device
     print( "Found devices:" )
-    selection = 0
-    for i, device in enumerate(devices):
+    selection = -1
+    for i, device in enumerate( devices ):
         print( f"{i}: {device.identifier()} - {device.address()}" )
         if "ESP32-C3 Mouse Control" in device.identifier():
             selection = i
             print( f"SELECTED {i}!" )
             break
+    if selection < 0:
+        raise RuntimeError( f"Could NOT find the expected device among:\n{pformat( devices, indent = 2 )}" )
     
     # Select device
     if len(devices) == 1:
@@ -205,4 +208,11 @@ def main():
         print( "Disconnected" )
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt as e:
+        print( f"Session ENDED by user!\n{e}\n" )
+        exit(0)
+    except RuntimeError as e:
+        print( f"Session ENDED by script!\n{e}\n" )
+        exit(1)
