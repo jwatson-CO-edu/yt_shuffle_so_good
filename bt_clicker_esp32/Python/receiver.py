@@ -65,7 +65,13 @@ def get_video_bbox( img, startLoc, swatchWidth = 40, swatchThick = 4, thresh = 2
 def get_yt_bbox():
     """ Get the bounding box of the YT video """
     img  = get_image()
-    crnr = get_video_bbox( img, _START_LOC, swatchWidth = 40, swatchThick = 4, thresh = 255*0.95 )
+    crnr = get_video_bbox( 
+        img, 
+        _START_LOC, 
+        swatchWidth = 80, 
+        swatchThick =  6, 
+        thresh = 255*0.90 
+    )
     return [crnr[1], crnr[0]] # Image space to mouse space
 
 
@@ -102,7 +108,7 @@ def main():
     print( "Found devices:" )
     selection = -1
     for i, device in enumerate( devices ):
-        print( f"{i}: {device.identifier()} - {device.address()}" )
+        print( f"{i:02}: {device.address()}, {device.identifier()}" )
         if "ESP32-C3 Mouse Control" in device.identifier():
             selection = i
             print( f"SELECTED {i}!" )
@@ -111,7 +117,7 @@ def main():
         raise RuntimeError( f"Could NOT find the expected device among:\n{pformat( devices, indent = 2 )}" )
     
     # Select device
-    if len(devices) == 1:
+    if len( devices ) == 1:
         selected_device = devices[0]
     else:
         selected_device = devices[ selection ]
