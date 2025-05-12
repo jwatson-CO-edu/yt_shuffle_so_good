@@ -2,8 +2,8 @@
 # python3.11 -m pip install selenium --user
 
 ########## INIT ####################################################################################
-import simplepyble
-import pynput
+import subprocess
+import simplepyble, pynput
 from pynput.mouse import Button
 from pynput.keyboard import Key
 from time import sleep
@@ -17,6 +17,7 @@ SERVICE_UUID        = "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 _START_LOC          = [ 592,  732 ] # Image Space
 _AD_OFFSET          = [ -80-10, -120-10 ] # Mouse Space
+
 
 
 ########## SCREEN IMAGE ANALYSIS ###################################################################
@@ -76,7 +77,31 @@ def get_yt_bbox():
 
 
 
+########## OS INTERACTION ##########################################################################
+
+def get_window_list():
+    """ Retrieves a list of open windows and their titles using `wmctrl` """
+    try:
+        output = subprocess.check_output( ["wmctrl", "-l"], text = True )
+        window_list = []
+        for line in output.strip().split("\n"):
+            parts = line.split( maxsplit = 3 )
+            if len( parts ) > 3:
+                window_id = parts[0]
+                title     = parts[3]
+                window_list.append( (window_id, title,) )
+        return window_list
+    except FileNotFoundError:
+         print("Error: wmctrl is not installed. Please install it using your distribution's package manager.")
+         return []
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing wmctrl: {e}")
+        return []
+
+
+
 ########## MAIN ####################################################################################
+
 def main():
     # Initialize controller
     mouse    = pynput.mouse.Controller()
