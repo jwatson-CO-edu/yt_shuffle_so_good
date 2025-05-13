@@ -70,8 +70,8 @@ def get_yt_bbox():
     crnr = get_video_bbox( 
         img, 
         _START_LOC, 
-        swatchWidth = 80, 
-        swatchThick =  6, 
+        swatchWidth = 400, 
+        swatchThick =   6, 
         thresh = 255*0.90 
     )
     return [crnr[1], crnr[0]] # Image space to mouse space
