@@ -71,7 +71,7 @@ def get_yt_bbox():
         img, 
         _START_LOC, 
         swatchWidth = 400, 
-        swatchThick =   6, 
+        swatchThick =   8, 
         thresh = 255*0.90 
     )
     return [crnr[1], crnr[0]] # Image space to mouse space
