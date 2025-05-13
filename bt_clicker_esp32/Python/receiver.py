@@ -110,7 +110,7 @@ def connect_to_ESP32():
     
     if not adapters:
         print( "No Bluetooth adapters found." )
-        return
+        return None, None, None
     
     # Select adapter (usually there's only one)
     adapter = adapters[1]
@@ -124,7 +124,7 @@ def connect_to_ESP32():
     devices = adapter.scan_get_results()
     if not devices:
         print( "No devices found." )
-        return
+        return None, None, None
     
     # Display and select device
     print( "Found devices:" )
@@ -156,13 +156,18 @@ def connect_to_ESP32():
     target_characteristic = None
     
     # Find our service and characteristic
+    found = False
     for service in services:
         if service.uuid() == SERVICE_UUID:
             target_service = service
             for characteristic in service.characteristics():
+                # print( characteristic.uuid() )
                 if characteristic.uuid() == CHARACTERISTIC_UUID:
+                    print( "UUID Match!" )
                     target_characteristic = characteristic
+                    found = True
                     break
+        if found:
             break
     
     if not target_characteristic:
