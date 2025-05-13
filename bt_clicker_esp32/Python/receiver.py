@@ -118,7 +118,7 @@ def connect_to_ESP32():
     
     # Start scanning
     print( "Scanning for devices..." )
-    adapter.scan_for( 15000 )  # Scan for 5 seconds
+    adapter.scan_for( 25000 )  # Scan for 5 seconds
     
     # Get discovered devices
     devices = adapter.scan_get_results()
@@ -252,8 +252,8 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt as e:
-        print( f"Session ENDED by user!\n{e}\n" )
+        print( f"\nSession ENDED by user!\n{e}\n" )
         exit(0)
     except RuntimeError as e:
-        print( f"Session ENDED by script!\n{e}\n" )
+        print( f"\nSession ENDED by script!\n{e}\n" )
         exit(1)
