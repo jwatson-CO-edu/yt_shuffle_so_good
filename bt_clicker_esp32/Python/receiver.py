@@ -234,15 +234,15 @@ def main():
             print( f"Error processing notification: {e}" )
     
 
-    selected_device, target_service, target_characteristic = connect_to_ESP32()    
-    selected_device.notify( target_service.uuid(), target_characteristic.uuid(), notification_callback )
+    selected_device = None
 
-    print( "Listening for signals. Press Ctrl+C to exit..." )
     while True:
         try:
-            if not selected_device.is_connected():
+            if (selected_device is None) or (not selected_device.is_connected()):
+                print( "Listening for signals. Press Ctrl+C to exit..." )
                 selected_device, target_service, target_characteristic = connect_to_ESP32()
-                selected_device.notify( target_service.uuid(), target_characteristic.uuid(), notification_callback )
+                if selected_device is not None:
+                    selected_device.notify( target_service.uuid(), target_characteristic.uuid(), notification_callback )
             sleep( 0.5 )
         except KeyboardInterrupt:
             selected_device.disconnect()
