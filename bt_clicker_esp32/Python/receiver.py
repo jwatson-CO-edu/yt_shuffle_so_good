@@ -6,6 +6,7 @@ import subprocess
 import simplepyble, pynput
 from pynput.mouse import Button
 from pynput.keyboard import Key
+# from simplepyble import Adapter
 from time import sleep
 import numpy as np
 from PIL import ImageGrab
@@ -102,11 +103,7 @@ def get_window_list():
 
 ########## MAIN ####################################################################################
 
-def main():
-    # Initialize controller
-    mouse    = pynput.mouse.Controller()
-    keyboard = pynput.keyboard.Controller()
-    
+def connect_to_ESP32():
     # Initialize SimplePyBLE
     adapter  = None
     adapters = simplepyble.Adapter.get_adapters()
@@ -148,11 +145,11 @@ def main():
         selected_device = devices[ selection ]
     
     print(f"Connecting to {selected_device.identifier()} ({selected_device.address()})...")
-    
+
     # Connect to device
     selected_device.connect()
     print( "Connected!" )
-    
+
     # Get services and characteristics
     services              = selected_device.services()
     target_service        = None
@@ -171,7 +168,16 @@ def main():
     if not target_characteristic:
         print( f"Could not find characteristic {CHARACTERISTIC_UUID}" )
         selected_device.disconnect()
-        return
+        return None, None, None
+
+    return selected_device, target_service, target_characteristic
+
+
+
+def main():
+    # Initialize controller
+    mouse    = pynput.mouse.Controller()
+    keyboard = pynput.keyboard.Controller()
     
     def short_kb_press( k, s ):
         """ Press `k` for `s` """
@@ -185,8 +191,10 @@ def main():
             keyboard.press( k )
             sleep( s )
             keyboard.release( k )
-    
+
+
     _PRESS_TIME_S = 0.05
+
 
     # Set up notification callback
     def notification_callback( data ):
@@ -225,18 +233,20 @@ def main():
         except Exception as e:
             print( f"Error processing notification: {e}" )
     
-    # Subscribe to notifications
+
+    selected_device, target_service, target_characteristic = connect_to_ESP32()    
     selected_device.notify( target_service.uuid(), target_characteristic.uuid(), notification_callback )
-    
+
     print( "Listening for signals. Press Ctrl+C to exit..." )
-    try:
-        while True:
-            sleep(1)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        selected_device.disconnect()
-        print( "Disconnected" )
+    while True:
+        try:
+            if not selected_device.is_connected():
+                selected_device, target_service, target_characteristic = connect_to_ESP32()
+                selected_device.notify( target_service.uuid(), target_characteristic.uuid(), notification_callback )
+            sleep( 0.5 )
+        except KeyboardInterrupt:
+            selected_device.disconnect()
+            raise KeyboardInterrupt( "Disconnected" )
 
 if __name__ == "__main__":
     try:
