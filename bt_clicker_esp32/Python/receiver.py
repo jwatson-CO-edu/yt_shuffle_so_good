@@ -245,6 +245,14 @@ def main():
     selected_device = None
 
     while True:
+        titles = [item[1] for item in get_window_list()]
+        ytStr  = ""
+        for title in titles:
+            if "YouTube" in title:
+                ytStr = str(title).split('YouTube')[0].split(' - ')[0]
+                if ')' in ytStr:
+                    ytStr = ytStr.split(')')[-1].strip()
+                    print( f"YouTube Title: {ytStr}" )
         try:
             if (selected_device is None) or (not selected_device.is_connected()):
                 print( "Listening for signals. Press Ctrl+C to exit..." )
