@@ -34,9 +34,11 @@ def get_image():
 
 def get_swatch_avg_value( img : np.ndarray, x0y0, x1y1 ):
     swatch = img[ x0y0[0]:x1y1[0], x0y0[1]:x1y1[1], : ]
-    rtnVal = np.sum( swatch ) / swatch.size
-    # print( rtnVal )
-    return rtnVal
+    if swatch.size:
+        rtnVal = np.sum( swatch ) / swatch.size
+        return rtnVal
+    else:
+        return 0.0
 
 
 def get_video_bbox( img, startLoc, swatchWidth = 40, swatchThick = 4, thresh = 255*0.95 ):
@@ -46,7 +48,7 @@ def get_video_bbox( img, startLoc, swatchWidth = 40, swatchThick = 4, thresh = 2
     xBox   = [[startLoc[0], startLoc[1]-hWidth], [startLoc[0]+swatchThick, startLoc[1]+hWidth,],]
     yBox   = [[startLoc[0]-hWidth, startLoc[1],], [startLoc[0]+hWidth, startLoc[1]+swatchThick,],]
     vals   = [0.0, 0.0,]
-    corner = startLoc
+    corner = startLoc[:] # Need to copy otherwise this is a ref?
     while vals[0] < thresh:
         vals[0] = get_swatch_avg_value( img, xBox[0], xBox[1] )
         if vals[0] >= thresh:
@@ -61,7 +63,8 @@ def get_video_bbox( img, startLoc, swatchWidth = 40, swatchThick = 4, thresh = 2
         else:
             yBox[0][1] += incr
             yBox[1][1] += incr
-    return corner
+    # return [corner[0] - swatchThick, corner[1] - swatchThick,]
+    return [corner[0], corner[1],]
 
 
 def get_yt_bbox():
@@ -71,8 +74,8 @@ def get_yt_bbox():
         img, 
         _START_LOC, 
         swatchWidth = 400, 
-        swatchThick =   8, 
-        thresh = 255*0.90 
+        swatchThick =   4, 
+        thresh = 255*0.98 
     )
     return [crnr[1], crnr[0]] # Image space to mouse space
 
