@@ -2,7 +2,7 @@
 # python3.11 -m pip install selenium --user
 
 ########## INIT ####################################################################################
-import subprocess
+import subprocess, time
 import simplepyble, pynput
 from pynput.mouse import Button
 from pynput.keyboard import Key
@@ -11,6 +11,7 @@ from time import sleep
 import numpy as np
 from PIL import ImageGrab
 from pprint import pformat
+now = time.time
 
 # UUID for the service and characteristic that send our signal
 # These should match the UUIDs in your ESP32 code
@@ -243,16 +244,18 @@ def main():
     
 
     selected_device = None
+    ytStr           = ""
 
     while True:
         titles = [item[1] for item in get_window_list()]
-        ytStr  = ""
         for title in titles:
             if "YouTube" in title:
                 ytStr = str(title).split('YouTube')[0].split(' - ')[0]
+                bgn   = now()
                 if ')' in ytStr:
                     ytStr = ytStr.split(')')[-1].strip()
-                    print( f"YouTube Title: {ytStr}" )
+                    bgn   = now()
+        print( f"YouTube Title: {ytStr}, {now()-bgn}" )
         try:
             if (selected_device is None) or (not selected_device.is_connected()):
                 print( "Listening for signals. Press Ctrl+C to exit..." )
