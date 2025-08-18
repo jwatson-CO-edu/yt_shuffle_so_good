@@ -248,6 +248,7 @@ def main():
 
     while True:
         titles = [item[1] for item in get_window_list()]
+        bgn    = now()
         for title in titles:
             if "YouTube" in title:
                 ytStr = str(title).split('YouTube')[0].split(' - ')[0]
