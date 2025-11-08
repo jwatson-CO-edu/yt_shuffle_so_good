@@ -6,7 +6,7 @@ import subprocess, time
 import simplepyble, pynput
 from pynput.mouse import Button
 from pynput.keyboard import Key
-from collections import deque
+# from simplepyble import Adapter
 from time import sleep
 import numpy as np
 from PIL import ImageGrab
@@ -18,9 +18,7 @@ now = time.time
 SERVICE_UUID        = "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 _START_LOC          = [ 592,  732 ] # Image Space
-# _AD_OFFSET          = [ -80-10, -120-25 ] # Mouse Space
-# _AD_OFFSET          = [ -80-10, -120 ] # Mouse Space
-_AD_OFFSET          = [ -80-10+7, -120+7 ] # Mouse Space
+_AD_OFFSET          = [ -80-10, -120-25 ] # Mouse Space
 
 
 
@@ -105,36 +103,6 @@ def get_window_list():
         print(f"Error executing wmctrl: {e}")
         return []
 
-
-
-########## YT MANAGER CLASS ########################################################################
-
-class AdStopperYT:
-    """ Monitor for ads and close them """
-    def __init__( self ):
-        self.scrnImg  = None # ----------- Latest screen grab
-        self.spectrum = None # ----------- Color summary of the latest screen grab
-        # FIXME: WHAT IS THE CORRECT COLOR SPECTRUM?
-        # FIXME: WHAT IS THE CORRECT SOUND SPECTRUM?
-        self.lastClk  = [0,0,] # --------- Screen location of the last click attempt
-        self.lastBox  = [[0,0,],[0,0,],] # Last ad bbox
-        self.lastBar  = [[0,0,],[0,0,],] # Last ad progress bar bbox
-        self.audio    = None # ----------- Reference to audio monitoring process
-        self.p_adNow  = False # ---------- Flag: Is there an ad running now?
-        self.p_btCon  = False # ---------- Flag: Is BlueTooth controller connected?
-        self.tLastAd  = now() # ---------- Time that the last add was detected
-        self.vIntrvl  = deque() # -------- Log of times between ad detections
-        self.mouse    = pynput.mouse.Controller()
-        self.keyboard = pynput.keyboard.Controller()
-
-    def connect_to_ESP32( self ):
-        pass
-        
-    def get_yt_bbox( self ):
-        pass
-
-    def notification_callback( self, data ):
-        pass
 
 
 ########## MAIN ####################################################################################
@@ -235,8 +203,6 @@ def main():
 
 
     _PRESS_TIME_S = 0.05
-    _MAX_M_DELTA  = 0.15
-    _last_click   = None
 
 
     # Set up notification callback
@@ -249,14 +215,6 @@ def main():
             if signal == "CLICK":
                 corner = get_yt_bbox()
                 nuPosn = [int(item) for item in np.add( corner, _AD_OFFSET ).tolist()]
-                # Handle ads that confuse the edge finder
-                if _last_click is not None:
-                    msDiff = np.linalg.norm( np.subtract( nuPosn, _last_click ) )
-                    denom  = max( np.linalg.norm( nuPosn ), np.linalg.norm( _last_click ) )
-                    dFrac  = msDiff / denom
-                    if dFrac > _MAX_M_DELTA:
-                        nuPosn = _last_click[:]
-                _last_click = nuPosn
                 print( f"Sending mouse to: {nuPosn}" )
                 mouse.position = nuPosn
                 mouse.click( Button.left )
