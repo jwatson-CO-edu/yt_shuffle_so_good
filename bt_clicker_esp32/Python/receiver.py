@@ -241,6 +241,7 @@ def main():
 
     # Set up notification callback
     def notification_callback( data ):
+        nonlocal _last_click
         try:
             signal = bytes( data ).decode( 'utf-8' ).strip()
             print( f"Received: {signal}, The current mouse position is: {mouse.position}" )
