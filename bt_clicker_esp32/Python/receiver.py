@@ -20,7 +20,7 @@ CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 _START_LOC          = [ 592,  732 ] # Image Space
 # _AD_OFFSET          = [ -80-10, -120-25 ] # Mouse Space
 # _AD_OFFSET          = [ -80-10, -120 ] # Mouse Space
-_AD_OFFSET          = [ -80-10+7, -120+7 ] # Mouse Space
+_AD_OFFSET          = [ -80-10+7, -120+12 ] # Mouse Space
 
 
 
