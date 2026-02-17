@@ -138,18 +138,24 @@ class AdStopperYT:
 
 
 ########## MAIN ####################################################################################
+_PREFERRED_ADAPTER = "hci0"
 
 def connect_to_ESP32():
     # Initialize SimplePyBLE
     adapter  = None
-    adapters = simplepyble.Adapter.get_adapters()
+    adapters = list( simplepyble.Adapter.get_adapters() )
     
     if not adapters:
         print( "No Bluetooth adapters found." )
         return None, None, None
     
     # Select adapter (usually there's only one)
-    adapter = adapters[1]
+    try:
+        adapter = adapters[ [item.identifier() for item in adapters].index( _PREFERRED_ADAPTER ) ]  
+    except Exception as e:
+        print(e)
+        adapter = adapters[0]
+
     print( f"Using adapter: {adapter.identifier()}" )
     
     # Start scanning
